@@ -23,10 +23,10 @@ client.on('ready', bot => {
 			case 'auger-realms':
 				messageConatiner = RealmMessages;
 				break;
-			case 'auger-persona'
+			case 'auger-persona':
 				messageConatiner = PersonaMessages;
 				break;
-			case 'auger-vanilla'
+			case 'auger-vanilla':
 				messageConatiner = VanillaMessages;
 				break;
 		}
@@ -35,7 +35,7 @@ client.on('ready', bot => {
 
 		for(let element of data.changes.modifiedElements) 
 			for(let { key } of element.modifiedKeys) 
-				if(key in messageConatiner) channel.send({embeds: [RealmMessages[key](element)]})
+				if(key in messageConatiner) channel.send({embeds: [messageConatiner[key](element)]})
 
 			
 
