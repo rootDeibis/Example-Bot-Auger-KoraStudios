@@ -37,6 +37,12 @@ client.on('ready', bot => {
 			for(let { key } of element.modifiedKeys) 
 				if(key in messageConatiner) channel.send({embeds: [messageConatiner[key](element)]})
 
+		for(let element of data.changes.newElements)
+			if ('contentPublication' in messageConatiner) channel.send({embeds: [messageConatiner['contentPublication'](element)]})
+
+		for(let element of data.changes.removedElements)
+			if ('contentRemoved' in messageConatiner) channel.send({embeds: [messageConatiner['contentRemoved'](element)]})
+
 			
 
 	});
