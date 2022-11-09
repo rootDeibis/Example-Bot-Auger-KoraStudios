@@ -1,8 +1,15 @@
-const $token = "*token*";
+const $token = "ODM3MTQzMTI2MDIzNjAyMjE4.GmwC89.12ohQMeclUma2wx-bq63OoPwrUIQ9_Oh9vVJ34";
+
 
 const { Client, GatewayIntentBits, EmbedBuilder  } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
+
+
+// # Import Socket Client Controller
 const SocketClient = require('./controllers/SocketClient.js');
+
+
+// # Import Messages Modules
 const RealmMessages = require("./messages/realms-messages.js");
 const PersonaMessages = require("./messages/persona-messages.js");
 const VanillaMessages = require("./messages/vanilla-messages.js");
@@ -10,15 +17,18 @@ const VanillaMessages = require("./messages/vanilla-messages.js");
 
 client.on('ready', bot => {
 
-	const guild = bot.guilds.resolve("*guild-id*");
-	const channel = guild.channels.resolve("*channel-id*");
+	const guild = bot.guilds.resolve("849024759508762704");
+	const channel = guild.channels.resolve("849024759508762709");
 
 	SocketClient.connect("localhost:3001");
 
 	SocketClient.onCacheUpdate((data) => {
 
+		// # Message Type Container
+
 		let messageConatiner;
 
+		// # Find message container from name
 		switch(data.name) {
 			case 'auger-realms':
 				messageConatiner = RealmMessages;
@@ -31,18 +41,43 @@ client.on('ready', bot => {
 				break;
 		}
 
+
+		// # if message container is empty cancel
 		if (messageConatiner == null) return;
 
+
+		const $messages = [];
+
+
+
+		// # Each modifications in object
 		for(let element of data.changes.modifiedElements) 
-			for(let { key } of element.modifiedKeys) 
-				if(key in messageConatiner) channel.send({embeds: [messageConatiner[key](element)]})
+			// # Each keys in modification 
+			for(let { key } of element.modifiedKeys){
+				// Find Modification key in message Container
+				if(key in messageConatiner) $messages.push(messageConatiner[key](element, data.new));
+			}
+			
 
+
+
+		// Publication and Removed Key in Message Container
+		let pubKey = "contentPublication";
+		let remKey = "contentRemoved";
+
+		// # Each new elements
 		for(let element of data.changes.newElements)
-			if ('contentPublication' in messageConatiner) channel.send({embeds: [messageConatiner['contentPublication'](element)]})
+			if (pubKey in messageConatiner) $messages.push(messageConatiner[pubKey](element, data.new));
 
+		// # Each removed elements
 		for(let element of data.changes.removedElements)
-			if ('contentRemoved' in messageConatiner) channel.send({embeds: [messageConatiner['contentRemoved'](element)]})
+			if (remKey in messageConatiner) $messages.push(messageConatiner[remKey](element, data.new))
 
+
+
+
+		// # Send Messages To Channel
+		if ($messages.length >= 1) channel.send({embeds: $messages});
 			
 
 	});

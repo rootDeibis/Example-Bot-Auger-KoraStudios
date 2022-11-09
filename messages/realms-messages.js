@@ -1,6 +1,35 @@
 const { EmbedBuilder } = require('discord.js');
 
 
+/*
+	
+
+	Realms * Available Message Types:
+
+
+	optedIn() => 
+
+	optInDate() => 
+
+	startDate() =>
+
+	payout() =>
+
+	title() =>
+
+	releaseDate() =>
+
+	endDate() =>
+
+	archived() =>
+	
+	purchasable() =>
+
+
+
+*/
+
+
 module.exports = {
 
 	optedIn(offer) {
