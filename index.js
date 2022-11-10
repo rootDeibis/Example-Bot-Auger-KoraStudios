@@ -1,4 +1,4 @@
-const $token = "ODM3MTQzMTI2MDIzNjAyMjE4.GmwC89.12ohQMeclUma2wx-bq63OoPwrUIQ9_Oh9vVJ34";
+const $token = "*token*";
 
 
 const { Client, GatewayIntentBits, EmbedBuilder  } = require('discord.js');
@@ -17,8 +17,8 @@ const VanillaMessages = require("./messages/vanilla-messages.js");
 
 client.on('ready', bot => {
 
-	const guild = bot.guilds.resolve("849024759508762704");
-	const channel = guild.channels.resolve("849024759508762709");
+	const guild = bot.guilds.resolve("*guild-id*");
+	const channel = guild.channels.resolve("*channel-id*");
 
 	SocketClient.connect("localhost:3001");
 
