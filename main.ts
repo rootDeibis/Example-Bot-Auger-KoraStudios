@@ -44,7 +44,7 @@ DiscordClient.on('ready', () => {
 		// # Each modifications in object
 		for(let element of data.modifiedElements) 
 			// # Each keys in modification 
-			for(let { key } of element.modifiedKeys){
+			for(let { key } of element.changes){
 				// Find Modification key in message Container
 				if(key in messageConatiner) $messages.push(messageConatiner[key](element, data.new));
 			}
