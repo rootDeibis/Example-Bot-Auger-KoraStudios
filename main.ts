@@ -9,7 +9,7 @@ const DiscordClient = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIn
 
 
 DiscordClient.on('ready', () => {
-    const guild: any = DiscordClient.guilds.resolve("849024759508762704");
+   const guild: any = DiscordClient.guilds.resolve("849024759508762704");
 	const channel = guild.channels.resolve("849024759508762709");
     const client = new SocketClient("http://localhost:3000");
 
@@ -18,6 +18,7 @@ DiscordClient.on('ready', () => {
 		// # Message Type Container
 
 		let messageConatiner: any;
+
 
 		// # Find message container from name
 		switch(data.cacheName) {
@@ -33,6 +34,7 @@ DiscordClient.on('ready', () => {
 		}
 
 
+
 		// # if message container is empty cancel
 		if (messageConatiner == null) return;
 
@@ -41,15 +43,17 @@ DiscordClient.on('ready', () => {
 
 
 
+
 		// # Each modifications in object
-		for(let element of data.modifiedElements) 
+		for(let element of data.modifiedElements) {
 			// # Each keys in modification 
-			for(let { key } of element.changes){
+
+			for(let key of element.changes){
 				// Find Modification key in message Container
 				if(key in messageConatiner) $messages.push(messageConatiner[key](element, data.new));
 			}
 			
-
+		}
 
 
 		// Publication and Removed Key in Message Container
@@ -70,6 +74,7 @@ DiscordClient.on('ready', () => {
 		// # Send Messages To Channel
 		if ($messages.length >= 1) channel.send({embeds: $messages});
 			
+
 
 	});
 })
