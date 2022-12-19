@@ -30,8 +30,8 @@ export default {
 
 	optInState(offer: any, data: any) {
 
-		const offv1 = data.result.value.filter((c: any) => c.optInState == "Opted In").length;
-		const offv2 = data.result.value.filter((c: any) => c.optInState == "Active").length;
+		const offv1: number = data.cache?.filter((c: any) => c.optInState == "Opted In").length | 0;
+		const offv2: number = data.cache?.filter((c: any) => c.optInState == "Active").length | 0;
 
 		let text;
 
