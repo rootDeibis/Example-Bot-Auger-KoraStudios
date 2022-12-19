@@ -1,23 +1,37 @@
 import { SocketClient } from "./web-api/client";
-import { Client, GatewayIntentBits } from 'discord.js';
+import { Client, GatewayIntentBits, Guild, GuildMember } from 'discord.js';
 
 import RealmMessages from "./messages/realms-messages";
 import PersonaMessages from "./messages/persona-messages";
 import VanillaMessages from "./messages/vanilla-messages";
 
-const DiscordClient = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
+import * as config from "./app.config.json";
+
+const DiscordClient = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages] });
 
 
-DiscordClient.on('ready', () => {
-   const guild: any = DiscordClient.guilds.resolve("849024759508762704");
-	const channel = guild.channels.resolve("849024759508762709");
-    const client = new SocketClient("http://localhost:3000");
+DiscordClient.on('ready', (e: Client) => {
+	const client = new SocketClient("http://localhost:3000");
+    const members: GuildMember[] = [];
+	const unFoundedMembers = () => config.NOTIFICATIONS_RECEIVERS.filter(id => !members.find(m => m.id == id));
+
+
 
 	client.onCacheUpdate((data) => {
 
 		// # Message Type Container
 
 		let messageConatiner: any;
+
+
+		if(unFoundedMembers().length != 0) {
+			DiscordClient.guilds.cache.forEach(async (guild: Guild) => {
+				for(let unfmember of unFoundedMembers()) {
+					const member = guild.members.resolve(unfmember);
+					if(member != null) members.push(member); 
+				}
+			});
+		}
 
 
 		// # Find message container from name
@@ -72,11 +86,17 @@ DiscordClient.on('ready', () => {
 
 
 		// # Send Messages To Channel
-		if ($messages.length >= 1) channel.send({embeds: $messages});
+		if ($messages.length >= 1) {
+			for(const member of members) 
+				member.send({embeds: $messages})
+				.catch((err) => {
+					console.log("Failed to send message: " + member.id)
+				});
 			
-
+		}
+			
 
 	});
 })
 
-DiscordClient.login("ODM3MTQzMTI2MDIzNjAyMjE4.GYD7h3.H-9mIPeufSmW3-N2leir2oOynuIy3hyAwEYIMQ");
+DiscordClient.login(config.BOT_TOKEN);

@@ -1,0 +1,6 @@
+{
+    "BOT_TOKEN": "<token>",
+    "NOTIFICATIONS_RECEIVERS": [
+        "<authorized-member-id>"
+    ]
+}

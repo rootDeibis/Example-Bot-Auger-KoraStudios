@@ -49,6 +49,13 @@ export default {
 				})
 			
 
+	},
+
+	contentPublication(offer: any) {
+
+		return new EmbedBuilder()
+			.setTitle("New realms offer " + offer.title)
+
 	}
 
 
