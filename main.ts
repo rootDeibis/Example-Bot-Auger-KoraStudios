@@ -24,14 +24,20 @@ DiscordClient.on('ready', (e: Client) => {
 		let messageConatiner: any;
 
 
-		if(unFoundedMembers().length != 0) {
-			DiscordClient.guilds.cache.forEach(async (guild: Guild) => {
-				for(let unfmember of unFoundedMembers()) {
-					const member = guild.members.resolve(unfmember);
-					if(member != null) members.push(member); 
-				}
-			});
+		
+
+		for(const unfmember of unFoundedMembers()) {
+			const guild = DiscordClient.guilds.cache.find(g => g.members.resolve(unfmember))
+
+			if(guild) {
+				const member = guild.members.resolve(unfmember);
+
+				if(member) members.push(member);
+			}
 		}
+		
+		
+
 
 
 		// # Find message container from name
