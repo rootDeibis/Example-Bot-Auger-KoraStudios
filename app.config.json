@@ -1,5 +1,7 @@
-{
+{   
+    "API_SERVER": "http://localhost:3000",
     "BOT_TOKEN": "<token>",
+    "AUTH_KEY": "<AUTHORIZATON_KEY>",
     "NOTIFICATIONS_RECEIVERS": [
         "<authorized-member-id>"
     ]

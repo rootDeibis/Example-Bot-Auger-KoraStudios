@@ -1,5 +1,5 @@
 import { SocketClient } from "./web-api/client";
-import { Client, GatewayIntentBits, Guild, GuildMember } from 'discord.js';
+import { Client, GatewayIntentBits , GuildMember } from 'discord.js';
 
 import RealmMessages from "./messages/realms-messages";
 import PersonaMessages from "./messages/persona-messages";
@@ -8,16 +8,16 @@ import VanillaMessages from "./messages/vanilla-messages";
 import * as config from "./app.config.json";
 
 const DiscordClient = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages] });
-
+const client: SocketClient = new SocketClient(config.API_SERVER);
 
 DiscordClient.on('ready', (e: Client) => {
-	const client = new SocketClient("http://localhost:3000");
+	
     const members: GuildMember[] = [];
 	const unFoundedMembers = () => config.NOTIFICATIONS_RECEIVERS.filter(id => !members.find(m => m.id == id));
 
 
 
-	client.onCacheUpdate((data) => {
+	client.onCacheUpdate((data: any) => {
 
 		// # Message Type Container
 
@@ -70,7 +70,7 @@ DiscordClient.on('ready', (e: Client) => {
 
 			for(let key of element.changes){
 				// Find Modification key in message Container
-				if(key in messageConatiner) $messages.push(messageConatiner[key](element, data.new));
+				if(key in messageConatiner) $messages.push(messageConatiner[key](element, data));
 			}
 			
 		}
@@ -82,11 +82,11 @@ DiscordClient.on('ready', (e: Client) => {
 
 		// # Each new elements
 		for(let element of data.newElements)
-			if (pubKey in messageConatiner) $messages.push(messageConatiner[pubKey](element, data.new));
+			if (pubKey in messageConatiner) $messages.push(messageConatiner[pubKey](element, data));
 
 		// # Each removed elements
 		for(let element of data.removedElements)
-			if (remKey in messageConatiner) $messages.push(messageConatiner[remKey](element, data.new))
+			if (remKey in messageConatiner) $messages.push(messageConatiner[remKey](element, data))
 
 
 
@@ -105,4 +105,4 @@ DiscordClient.on('ready', (e: Client) => {
 	});
 })
 
-DiscordClient.login(config.BOT_TOKEN);
+//DiscordClient.login(config.BOT_TOKEN);
